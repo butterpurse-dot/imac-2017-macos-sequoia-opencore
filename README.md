@@ -12,6 +12,34 @@ Apple's last macOS for this iMac is **Ventura 13.7.8**. This one now runs **Sequ
 | Tool | OCLP 2.5.1 → OpenCore 1.0.6 |
 | Result | Sequoia 15.8.1 · Wi‑Fi ✅ · Metal GPU ✅ |
 
+## Verified working
+
+From System Information and the diagnostic reports after the upgrade.
+
+| Area | Status | Detail |
+|---|:-:|---|
+| Graphics | ✅ | Radeon Pro (Polaris) accelerated (`AMDRadeonX4000`), Metal 2. Intel graphics accelerated too |
+| Display | ✅ | Built-in Retina at 4096 × 2304 |
+| Wi‑Fi | ✅ | BCM43602, 5 GHz 802.11ac, via OCLP's `IO80211FamilyLegacy` + `AirportBrcmFixup` |
+| Bluetooth | ✅ | BCM20703 |
+| Audio | ✅ | Built-in speakers and microphone |
+| FaceTime camera | ✅ | Detected |
+| Ethernet | ✅ | Gigabit, `AppleBCM5701Ethernet` |
+| Boot from T7 | ✅ | OpenCore on the T7's EFI, no USB stick needed |
+| Kernel panics | ✅ | None |
+| Shutdown | 🟡 | Slow shutdowns logged during the upgrade restarts. Watching |
+| Memory | 🟡 | One low-memory event on first boot. 8 GB is tight |
+| SIP | ⚠️ | Off. Required by OCLP |
+
+Check your own:
+
+```bash
+system_profiler SPSoftwareDataType SPDisplaysDataType SPAirPortDataType SPBluetoothDataType SPAudioDataType SPCameraDataType
+ioreg -rc IOAccelerator | grep IOClass        # GPU acceleration
+kmutil showloaded | grep -iE "lilu|amfipass|airportbrcm|80211FamilyLegacy"
+ls /Library/Logs/DiagnosticReports | grep -i panic   # empty = good
+```
+
 ## How it boots
 
 <p align="center"><img src="assets/boot-chain.svg" alt="Firmware → OpenCore on T7 EFI → iMac19,1 spoof → Sequoia" width="100%"></p>

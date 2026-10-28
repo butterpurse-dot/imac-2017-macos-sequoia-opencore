@@ -16,14 +16,54 @@ Apple's last macOS for this iMac is **Ventura 13.7.8**. This one now runs **Sequ
 
 <p align="center"><img src="assets/boot-chain.svg" alt="Firmware → OpenCore on T7 EFI → iMac19,1 spoof → Sequoia" width="100%"></p>
 
-## The short recipe
+## Does this apply to you?
 
-1. **OCLP** → *Create macOS Installer* → *Download macOS Installer*, pick Sequoia, then *Flash Installer* onto a USB stick of **32 GB or more**.
-2. When it asks to install OpenCore onto the stick, say **yes** and choose the stick's **EFI** partition. Check it really landed with `scripts/diag-efi.sh`.
-3. Copy that OpenCore to the T7: `scripts/sync-oc-to-t7.sh`.
-4. Spoof the model so the installer accepts the Mac: `scripts/spoof-smbios.sh` (iMac18,2 → iMac19,1).
-5. Restart. The T7's OpenCore boots by itself. Open `Install macOS Sequoia.app` and pick the T7 as the destination.
-6. ☕ About an hour. Done.
+| You have | Status |
+|---|---|
+| iMac18,2 on Ventura, booting from an external USB‑C SSD | ✅ Tested. This repo |
+| iMac18,2 booting from the internal drive | 🟡 Same steps should work. Pick the internal disk instead of the SSD. Untested |
+| iMac18,1 / iMac18,3 (2017 Kaby Lake) | 🟡 Probably the same model check and fix. Untested |
+| Any other Mac | ❓ Check [OCLP's supported models](https://dortania.github.io/OpenCore-Legacy-Patcher/MODELS.html) first |
+| Apple Silicon Mac | ❌ Not needed. Use Software Update |
+
+**You'll need:** OCLP 2.5.1+, a USB stick of 32 GB or more (it gets erased), a **wired** keyboard, an admin password, and about 2 hours.
+
+## Step matrix
+
+| # | Step | How | Command / clicks | sudo | Restart | Check it worked |
+|---|---|---|---|:-:|:-:|---|
+| 0 | Find your disk names | Terminal | `diskutil list external physical` then `diskutil info diskN \| grep "Media Name"` | | | You know the stick's and the SSD's names |
+| 1 | Install OCLP | Browser | [OCLP releases](https://github.com/dortania/OpenCore-Legacy-Patcher/releases), run the `.pkg` | ✔ | | `OpenCore-Patcher.app` is in Applications |
+| 2 | Put OpenCore on the SSD | OCLP | *Build and Install OpenCore* → *Install to disk* → SSD → EFI | ✔ | ✔ | `nvram 4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102:opencore-version` prints a version |
+| 3 | Make the installer stick | OCLP | *Create macOS Installer* → *Download* → Sequoia → *Flash Installer* → stick | ✔ | | A volume named "Install macOS Sequoia" appears |
+| 4 | OpenCore onto the stick | OCLP | Say **yes** when it asks → stick → **EFI** → *Install* | ✔ | | `bash scripts/diag-efi.sh` shows a `config.plist` on the stick |
+| 5 | Copy it to the SSD | Script | `bash scripts/sync-oc-to-t7.sh` | ✔ | | Prints `RESULT: OK` |
+| 6 | Spoof iMac19,1 | Script | `bash scripts/spoof-smbios.sh` | ✔ | ✔ | After restarting, `ioreg -lp IODeviceTree -d2 \| grep board-id` shows `Mac-AA95B1DDAB278B95` (iMac19,1's board). `hw.model` may still say iMac18,2, and that's fine |
+| 7 | Install Sequoia | Installer | `open "/Applications/Install macOS Sequoia.app"` → pick the SSD | ✔ | ✔✔✔ | `sw_vers -productVersion` prints 15.x |
+| 8 | Optional speed-up | Script | `bash scripts/debloat.sh` | | | Prints `off: …` lines |
+
+## Commands, in order
+
+```bash
+git clone https://github.com/butterpurse-dot/imac18-2-macos-sequoia-opencore-external-ssd.git
+cd imac18-2-macos-sequoia-opencore-external-ssd
+
+sysctl -n hw.model                       # expect iMac18,2
+diskutil list external physical          # find the stick and the SSD
+export STICK_NAME="CB05" SSD_NAME="PSSD T7"   # ← your names from diskutil info
+
+# steps 1–4 happen in the OCLP app (see the matrix above), then:
+bash scripts/diag-efi.sh                 # stick must show EFI/OC/config.plist
+bash scripts/sync-oc-to-t7.sh            # → RESULT: OK
+bash scripts/spoof-smbios.sh             # → RESULT: OK
+sudo shutdown -r now                     # OpenCore boots the SSD by itself after 10 s
+
+open "/Applications/Install macOS Sequoia.app"   # pick the SSD · ☕ about an hour
+sw_vers -productVersion                  # 15.x 🎉
+bash scripts/debloat.sh                  # optional
+```
+
+Backups land in `/Users/Shared/OC-backup-<date>/`. To undo the spoof, copy `config.before-spoof.plist` back to the SSD's `EFI/OC/config.plist`.
 
 <p align="center"><img src="assets/terminal.svg" alt="terminal replay of the upgrade" width="100%"></p>
 

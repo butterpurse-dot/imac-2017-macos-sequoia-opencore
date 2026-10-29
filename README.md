@@ -115,7 +115,9 @@ Backups land in `/Users/Shared/OC-backup-<date>/`. To undo the spoof, copy `conf
 
 ## Keep it working
 
-- Update macOS **through OCLP**, not System Settings. Update OCLP first.
+- Sequoia 15.x security updates through System Settings are fine. OCLP's `macos-update` hook gets ready for them, and after the restart OCLP offers to re‑apply its patches (accept, then restart). Wi‑Fi may be missing until then.
+- Major upgrades never install automatically. Wait for OCLP to support the next macOS before upgrading.
+- Keep OCLP itself updated. It tells you when there's a new version.
 - If it won't boot, hold ⌥ and pick the T7.
 
 ## Scripts

@@ -33,5 +33,5 @@
   <text class="t" x="730" y="72" text-anchor="middle" font-size="15" fill="#7ee787">Sequoia 🎉</text>
   <text class="t s" x="730" y="94" text-anchor="middle">15.x</text>
 
-  <text class="t s" x="410" y="145" text-anchor="middle">no USB stick needed after install · your disk stays the default</text>
+  <text class="t s" x="410" y="145" text-anchor="middle">after install, the stick is no longer needed</text>
 </svg>

@@ -2,7 +2,7 @@
 
 <p align="center"><img src="assets/hero.svg" alt="2017 iMac upgraded from Ventura 13.7.8 to Sequoia 15.8.1" width="100%"></p>
 
-Apple's last macOS for this iMac is **Ventura 13.7.8**. This one now runs **Sequoia 15.8.1 (24H32)** with
+Apple's last macOS for this iMac is **Ventura 13.7.8**. This one now runs **Sequoia 15.8.x (now 15.8.2)** with
 [OpenCore Legacy Patcher](https://github.com/dortania/OpenCore-Legacy-Patcher) 2.5.1. It boots from a USB‑C Samsung T7 SSD, not the slow internal HDD.
 
 | | |
@@ -27,8 +27,9 @@ From System Information and the diagnostic reports after the upgrade.
 | Ethernet | ✅ | Gigabit, `AppleBCM5701Ethernet` |
 | Boot from T7 | ✅ | OpenCore on the T7's EFI, no USB stick needed |
 | Kernel panics | ✅ | None |
-| Shutdown | 🟡 | Slow shutdowns logged during the upgrade restarts. Watching |
-| Memory | 🟡 | One low-memory event on first boot. 8 GB is tight |
+| macOS updates | ✅ | Auto-updated 15.8.1 → 15.8.2. OCLP re-applied its patches after one restart. Wi‑Fi and GPU survived |
+| Shutdown | ✅ | `shutdown_stall` reports still appear, but decoded they show no hung process. macOS logs one whenever shutdown passes 2 s. They happened on Ventura too |
+| Memory | ✅ | Normal pressure in everyday use with `debloat.sh`. Heavy Xcode builds still swap a little. More RAM is the only real fix |
 | SIP | ⚠️ | Off. Required by OCLP |
 
 Check your own:

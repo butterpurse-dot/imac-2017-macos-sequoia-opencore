@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 230" width="820" height="230" role="img" aria-label="Terminal replay: syncing OpenCore to the T7, spoofing iMac19,1, then sw_vers reports macOS 15.8.1">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 230" width="820" height="230" role="img" aria-label="Terminal replay: syncing OpenCore to the boot disk, spoofing iMac19,1, then sw_vers reports macOS 15">
   <style>
     .bg { fill: #0d1117; }
     .bar { fill: #161b22; }
@@ -26,13 +26,13 @@
   <text class="t d" x="410" y="20" text-anchor="middle" font-size="12">zsh — the whole saga in 8 lines</text>
 
   <g>
-    <text class="t l l1" x="20" y="58"><tspan class="p">❯</tspan> bash scripts/sync-oc-to-t7.sh</text>
-    <text class="t l l2" x="20" y="80"><tspan class="ok">RESULT: OK</tspan><tspan class="d">, the T7 now has the Sequoia-ready OpenCore</tspan></text>
+    <text class="t l l1" x="20" y="58"><tspan class="p">❯</tspan> bash scripts/sync-oc-to-disk.sh</text>
+    <text class="t l l2" x="20" y="80"><tspan class="ok">RESULT: OK</tspan><tspan class="d">, the boot disk now has the Sequoia-ready OpenCore</tspan></text>
     <text class="t l l3" x="20" y="106"><tspan class="p">❯</tspan> bash scripts/spoof-smbios.sh</text>
-    <text class="t l l4" x="20" y="128"><tspan class="d">Model 'iMac18,2' → </tspan>'iMac19,1'  <tspan class="ok">RESULT: OK</tspan></text>
+    <text class="t l l4" x="20" y="128"><tspan class="d">Model 'iMac18,x' → </tspan>'iMac19,1'  <tspan class="ok">RESULT: OK</tspan></text>
     <text class="t l l5" x="20" y="154"><tspan class="p">❯</tspan> open "/Applications/Install macOS Sequoia.app"  <tspan class="d"># ☕ ~1 h</tspan></text>
     <text class="t l l6" x="20" y="180"><tspan class="p">❯</tspan> sw_vers -productVersion</text>
-    <text class="t l l7" x="20" y="202"><tspan class="ok">15.8.1</tspan>  🎉</text>
+    <text class="t l l7" x="20" y="202"><tspan class="ok">15.x</tspan>  🎉</text>
     <text class="t l l8" x="20" y="222"><tspan class="p">❯</tspan> ▍</text>
   </g>
 </svg>

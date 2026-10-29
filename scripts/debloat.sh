@@ -6,10 +6,8 @@ U=$(id -u)
 for l in com.apple.assistantd com.apple.siriknowledged com.apple.siriinferenced com.apple.sirittsd com.apple.SiriTTSTrainingAgent \
          com.apple.newsd com.apple.photoanalysisd com.apple.mediaanalysisd com.apple.tipsd com.apple.studentd \
          com.apple.amsengagementd com.apple.gamed com.apple.knowledge-agent com.apple.parsecd com.apple.suggestd com.apple.weatherd; do
-  if launchctl print gui/$U/$l >/dev/null 2>&1; then
-    launchctl disable gui/$U/$l && launchctl bootout gui/$U/$l 2>/dev/null
-    echo "off: $l"
-  fi
+  launchctl disable gui/$U/$l && echo "off: $l"
+  launchctl bootout gui/$U/$l 2>/dev/null
 done
 
 # Siri off, Spotlight without web/Siri suggestions, less transparency and motion
